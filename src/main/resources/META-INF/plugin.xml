@@ -16,10 +16,6 @@
                 implementation="com.github.tamj0rd2.anuraplugin.handlers.GoToHandlebarsPartial"/>
 
         <projectService
-                serviceInterface="com.github.tamj0rd2.anuraplugin.services.IMyProjectService"
-                serviceImplementation="com.github.tamj0rd2.anuraplugin.services.MyProjectService"/>
-
-        <projectService
                 serviceInterface="com.github.tamj0rd2.anuraplugin.services.IHbsService"
                 serviceImplementation="com.github.tamj0rd2.anuraplugin.services.HbsService"/>
 
