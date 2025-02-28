@@ -13,9 +13,6 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <gotoDeclarationHandler
-                implementation="com.github.tamj0rd2.anuraplugin.handlers.GoToMatchingKotlinFieldFromHandlebars"/>
-
-        <gotoDeclarationHandler
                 implementation="com.github.tamj0rd2.anuraplugin.handlers.GoToHandlebarsPartial"/>
 
         <projectService
@@ -24,10 +21,16 @@
 
         <projectService
                 serviceInterface="com.github.tamj0rd2.anuraplugin.services.IHbsService"
-                serviceImplementation="com.github.tamj0rd2.anuraplugin.services.HbsService" />
+                serviceImplementation="com.github.tamj0rd2.anuraplugin.services.HbsService"/>
 
         <annotator language="Handlebars"
                    implementationClass="com.github.tamj0rd2.anuraplugin.annotators.MyAnnotator"/>
+
+        <psi.referenceContributor language="Handlebars"
+                                  implementation="com.github.tamj0rd2.anuraplugin.references.MyReferenceContributor"/>
+
+        <lang.elementManipulator implementationClass="com.github.tamj0rd2.anuraplugin.references.HbsElementManipulator"
+                                 forClass="com.dmarcotte.handlebars.psi.HbPsiElement"/>
     </extensions>
 
     <applicationListeners>

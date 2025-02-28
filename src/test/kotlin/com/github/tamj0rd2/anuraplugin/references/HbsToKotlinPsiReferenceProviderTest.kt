@@ -1,13 +1,12 @@
-package com.github.tamj0rd2.anuraplugin.handlers
+package com.github.tamj0rd2.anuraplugin.references
 
 import com.intellij.codeInsight.navigation.actions.GotoDeclarationAction
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import junit.framework.TestCase
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 
-class GoToMatchingKotlinFieldFromHandlebarsTest : BasePlatformTestCase() {
+class HbsToKotlinPsiReferenceProviderTest : BasePlatformTestCase() {
     fun `test going to declaration of variable that is a kotlin field`() {
         runGoToKotlinDeclarationTest(
             // language=Kt
@@ -309,6 +308,6 @@ class GoToMatchingKotlinFieldFromHandlebarsTest : BasePlatformTestCase() {
                     )
                 }
 
-        TestCase.assertEquals(expectedReferences, targetElements)
+        assertEquals(expectedReferences, targetElements)
     }
 }
