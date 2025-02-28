@@ -9,7 +9,7 @@ class HbsVariableAnnotatorTest : BasePlatformTestCase() {
         return "path/to/your/testdata" // Set the path to your test data files
     }
 
-    fun testMyAnnotator() {
+    fun `test variables that don't have corresponding kotlin fields are highlighted`() {
         setupFiles(
             files = mapOf(
                 "ViewModel.kt" to
@@ -25,6 +25,25 @@ class HbsVariableAnnotatorTest : BasePlatformTestCase() {
 
         val highlightedTexts = myFixture.doHighlighting().map { it.text }
         TestCase.assertEquals(listOf("incorrectName"), highlightedTexts)
+    }
+
+    fun `test that partial names and their context are not annotated`() {
+        setupFiles(
+            files = mapOf(
+                "View.hbs" to
+                    // language=Handlebars
+                    """
+                    |{{>src/path/to/APartial}}
+                    |{{>src/path/to/SomePartialWithContext someContext someTemplateVariable=123}}
+                    |{{#>src/path/to/PartialWithBlock}}
+                    |    {{someBlockContent}}
+                    |{{/src/path/to/PartialWithBlock}}
+                    """.trimMargin()
+            ),
+        )
+
+        val highlightedTexts = myFixture.doHighlighting().map { it.text }
+        TestCase.assertEquals(listOf("someBlockContent"), highlightedTexts)
     }
 
     private fun setupFiles(files: Map<String, String>) {
