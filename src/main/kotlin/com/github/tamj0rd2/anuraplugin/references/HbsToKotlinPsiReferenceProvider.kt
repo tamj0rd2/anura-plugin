@@ -3,7 +3,6 @@ package com.github.tamj0rd2.anuraplugin.references
 import com.github.tamj0rd2.anuraplugin.handlers.HbsUtils.isHbPsiIdElement
 import com.github.tamj0rd2.anuraplugin.services.HbsService
 import com.intellij.openapi.components.service
-import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.resolveFromRootOrRelative
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
@@ -27,19 +26,15 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtTypeProjection
 
 class HbsToKotlinPsiReferenceProvider : PsiReferenceProvider() {
-    override fun acceptsTarget(target: PsiElement): Boolean {
-        return target.isHbPsiIdElement()
-    }
-
     override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
-        if (!acceptsTarget(element)) return emptyArray()
+        if (!element.isHbPsiIdElement()) return emptyArray()
 
         val hbsService = element.project.service<HbsService>()
 
         val declarations = recursivelyFindMatchingKotlinReferences(
-            typesToSearchIn = setOf(hbsFileToKotlinModelName(hbsFile = element.containingFile.virtualFile)),
+            typesToSearchIn = setOf(element.containingFile.toKotlinModelName()),
             hbsIdentifierParts = hbsService.getHbsIdentifierParts(element),
-            scope = element.containingFile.toKotlinProductionScopeOrDefault()
+            scope = element.containingFile.toKotlinProductionScopeOrDefault(),
         )
 
         return declarations.map { Immediate(element, it) }.toTypedArray()
@@ -60,10 +55,8 @@ class HbsToKotlinPsiReferenceProvider : PsiReferenceProvider() {
             )
         }
 
-        val psiShortNamesCache = PsiShortNamesCache.getInstance(scope.project)
-
         val models = typesToSearchIn
-            .flatMap { psiShortNamesCache.findKotlinClassesByName(it, scope) }
+            .flatMap { scope.findKotlinClassesByName(it) }
             .distinctBy { it.node }
 
         val matchingFields = models
@@ -79,12 +72,6 @@ class HbsToKotlinPsiReferenceProvider : PsiReferenceProvider() {
         )
     }
 
-    private fun PsiShortNamesCache.findKotlinClassesByName(modelName: String, scope: GlobalSearchScope): List<KtLightClassBase> {
-        return getClassesByName(modelName, scope)
-            .filterIsInstance<KtLightClassBase>()
-            .distinctBy { it.node }
-    }
-
     private fun PsiFile.toKotlinProductionScopeOrDefault(): GlobalSearchScope {
         if (!virtualFile.path.contains("src/main/resources")) return GlobalSearchScope.projectScope(project)
 
@@ -97,7 +84,14 @@ class HbsToKotlinPsiReferenceProvider : PsiReferenceProvider() {
         return GlobalSearchScopesCore.directoryScope(project, folderToSearch, true)
     }
 
+    private fun GlobalSearchScope.findKotlinClassesByName(modelName: String): List<KtLightClassBase> =
+        PsiShortNamesCache.getInstance(project)
+            .getClassesByName(modelName, this)
+            .filterIsInstance<KtLightClassBase>()
+            .distinctBy { it.node }
+
     private companion object {
+
         fun KtDeclaration.referencedTypeName(): String {
             if (this.isAKotlinList()) {
                 return typeReference.typeArguments().single().referencedTyped.getReferencedName()
@@ -135,12 +129,12 @@ class HbsToKotlinPsiReferenceProvider : PsiReferenceProvider() {
                 else -> error("unsupported type ${this::class.java}")
             }
 
-        fun hbsFileToKotlinModelName(hbsFile: VirtualFile): String {
-            if (hbsFile.nameWithoutExtension.endsWith("View")) {
-                return hbsFile.nameWithoutExtension + "Model"
+        fun PsiFile.toKotlinModelName(): String {
+            if (virtualFile.nameWithoutExtension.endsWith("View")) {
+                return virtualFile.nameWithoutExtension + "Model"
             }
 
-            return hbsFile.nameWithoutExtension
+            return virtualFile.nameWithoutExtension
         }
     }
 }

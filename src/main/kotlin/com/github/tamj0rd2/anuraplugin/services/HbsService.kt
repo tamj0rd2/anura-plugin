@@ -5,7 +5,7 @@ import com.dmarcotte.handlebars.psi.HbBlockWrapper
 import com.dmarcotte.handlebars.psi.HbOpenBlockMustache
 import com.dmarcotte.handlebars.psi.HbParam
 import com.dmarcotte.handlebars.psi.HbSimpleMustache
-import com.github.tamj0rd2.anuraplugin.handlers.HbsUtils.isHbsIdElement
+import com.github.tamj0rd2.anuraplugin.handlers.HbsUtils.isHbPsiIdElement
 import com.intellij.openapi.components.Service
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
@@ -21,7 +21,7 @@ interface IHbsService {
 class HbsService : IHbsService {
 
     override fun getHbsIdentifierParts(element: PsiElement): List<String> {
-        if (!element.isHbsIdElement()) return emptyList()
+        if (!element.isHbPsiIdElement()) return emptyList()
 
         return element.parentsWithSelf
             .fold(emptyList(), ::foldHbsIdentifierParts)
