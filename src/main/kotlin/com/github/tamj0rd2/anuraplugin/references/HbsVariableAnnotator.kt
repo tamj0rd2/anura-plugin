@@ -1,29 +1,22 @@
 package com.github.tamj0rd2.anuraplugin.references
 
-import com.github.tamj0rd2.anuraplugin.handlers.HbsUtils.isHbsIdElement
-import com.github.tamj0rd2.anuraplugin.services.HbsService
-import com.github.tamj0rd2.anuraplugin.services.MyProjectService
+import com.github.tamj0rd2.anuraplugin.handlers.HbsUtils.isHbPsiIdElement
 import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
-import com.intellij.openapi.components.service
 import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.utils.addToStdlib.ifNotEmpty
 
 internal class HbsVariableAnnotator : Annotator {
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
-        val hbsService = element.project.service<HbsService>()
-        val projectService = element.project.service<MyProjectService>()
+        if (!element.isHbPsiIdElement()) return
 
-        if (!element.isHbsIdElement()) return
-        if (!hbsService.isElementAllowedToBeSearchedFor(element)) return
-
-        val definitions = projectService.findKotlinReferences(
-            hbsFile = element.containingFile.virtualFile,
-            hbsIdentifierParts = hbsService.getHbsIdentifierParts(element)
-        )
-
-        if (definitions.isNotEmpty()) return
+        element.references
+            .mapNotNull { it.resolve() }
+            .filterIsInstance<KtElement>()
+            .ifNotEmpty { return }
 
         holder.newSilentAnnotation(HighlightSeverity.ERROR)
             .highlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL)

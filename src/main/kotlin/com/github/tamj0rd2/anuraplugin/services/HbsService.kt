@@ -9,7 +9,6 @@ import com.github.tamj0rd2.anuraplugin.handlers.HbsUtils.isHbsIdElement
 import com.intellij.openapi.components.Service
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
-import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.jetbrains.kotlin.psi.psiUtil.parentsWithSelf
 import org.jetbrains.kotlin.util.takeWhileInclusive
 import org.toml.lang.psi.ext.elementType
@@ -28,16 +27,6 @@ class HbsService : IHbsService {
             .fold(emptyList(), ::foldHbsIdentifierParts)
             .takeWhileInclusive { it != element.text }
     }
-
-    fun isElementAllowedToBeSearchedFor(element: PsiElement) =
-        element.parents.any {
-            when(it) {
-                is HbSimpleMustache,
-                is HbParam -> true
-
-                else -> false
-            }
-        }
 
     private fun foldHbsIdentifierParts(identifierParts: List<String>, element: PsiElement): List<String> {
         when (element) {

@@ -23,8 +23,8 @@ class HbsVariableAnnotatorTest : BasePlatformTestCase() {
             ),
         )
 
-        val highlightedTexts = myFixture.doHighlighting().map { it.text }.toSet()
-        TestCase.assertEquals(setOf("incorrectName"), highlightedTexts)
+        val highlightedTexts = myFixture.doHighlighting().map { it.text }
+        TestCase.assertEquals(listOf("incorrectName"), highlightedTexts)
     }
 
     private fun setupFiles(files: Map<String, String>) {
