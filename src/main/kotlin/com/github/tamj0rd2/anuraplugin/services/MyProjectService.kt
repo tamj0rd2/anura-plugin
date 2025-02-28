@@ -1,7 +1,5 @@
 package com.github.tamj0rd2.anuraplugin.services
 
-import com.dmarcotte.handlebars.psi.HbPsiFile
-import com.dmarcotte.handlebars.psi.HbSimpleMustache
 import com.github.tamj0rd2.anuraplugin.MyBundle
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.thisLogger
@@ -11,7 +9,6 @@ import com.intellij.openapi.vfs.resolveFromRootOrRelative
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.GlobalSearchScopesCore
 import com.intellij.psi.search.PsiShortNamesCache
-import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.descendantsOfType
 import org.jetbrains.kotlin.asJava.classes.KtLightClassBase
 import org.jetbrains.kotlin.asJava.elements.KtLightField
@@ -37,30 +34,6 @@ class MyProjectService(private val project: Project) : IMyProjectService {
 
     init {
         thisLogger().info(MyBundle.message("projectService", project.name))
-    }
-
-    fun validateOneToOneMappingAgainstViewModel(hbsFile: HbPsiFile): MappingValidationResult {
-        // TODO: this should get things with hbsIdentifierParts like in the other method.
-        val fieldsRequiredByTemplate = hbsFile.findAllReferencedModelVariables()
-        val viewModelName = hbsFileToKotlinModelName(hbsFile.virtualFile)
-        val viewModel = findKotlinClassesByName(
-            modelName = viewModelName,
-            scope = GlobalSearchScope.projectScope(project)
-        ).single()
-
-        val matchingFieldsInViewModel = fieldsRequiredByTemplate
-            .filter {
-                findKotlinReferences(
-                    hbsFile = hbsFile.virtualFile,
-                    hbsIdentifierParts = it.split(".")
-                ).isNotEmpty()
-            }
-            .toSet()
-
-        return MappingValidationResult(
-            fieldsMissingFromViewModel = fieldsRequiredByTemplate - matchingFieldsInViewModel,
-            viewModelName = viewModel.name!!,
-        )
     }
 
     override fun findKotlinReferences(
@@ -108,11 +81,6 @@ class MyProjectService(private val project: Project) : IMyProjectService {
         )
     }
 
-    data class MappingValidationResult(
-        val fieldsMissingFromViewModel: Set<String>,
-        val viewModelName: String,
-    )
-
     private fun findKotlinClassesByName(modelName: String, scope: GlobalSearchScope): List<KtLightClassBase> {
         return psiShortNamesCache.getClassesByName(modelName, scope)
             .filterIsInstance<KtLightClassBase>()
@@ -132,9 +100,6 @@ class MyProjectService(private val project: Project) : IMyProjectService {
     }
 
     private companion object {
-        fun HbPsiFile.findAllReferencedModelVariables(): Set<String> =
-            PsiTreeUtil.collectElementsOfType(this, HbSimpleMustache::class.java).map { it.name }.toSet()
-
         fun KtDeclaration.referencedTypeName(): String {
             if (this.isAKotlinList()) {
                 return typeReference.typeArguments().single().referencedTyped.getReferencedName()

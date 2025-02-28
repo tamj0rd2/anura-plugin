@@ -9,8 +9,8 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
 import com.intellij.psi.PsiReferenceBase.Immediate
 import com.intellij.psi.PsiReferenceProvider
-import com.intellij.psi.util.elementType
 import com.intellij.util.ProcessingContext
+import org.toml.lang.psi.ext.elementType
 
 class HbsToKotlinPsiReferenceProvider : PsiReferenceProvider() {
     override fun acceptsTarget(target: PsiElement): Boolean {
@@ -18,6 +18,8 @@ class HbsToKotlinPsiReferenceProvider : PsiReferenceProvider() {
     }
 
     override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
+        if (!acceptsTarget(element)) return emptyArray()
+
         val kotlinService = element.project.service<MyProjectService>()
         val hbsService = element.project.service<HbsService>()
 
