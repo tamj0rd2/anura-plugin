@@ -1,4 +1,4 @@
-package com.github.tamj0rd2.anuraplugin.annotators
+package com.github.tamj0rd2.anuraplugin.references
 
 import com.github.tamj0rd2.anuraplugin.handlers.HbsUtils.isHbsIdElement
 import com.github.tamj0rd2.anuraplugin.services.HbsService

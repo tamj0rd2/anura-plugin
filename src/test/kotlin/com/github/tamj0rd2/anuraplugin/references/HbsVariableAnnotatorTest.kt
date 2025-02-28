@@ -1,4 +1,4 @@
-package com.github.tamj0rd2.anuraplugin.annotators
+package com.github.tamj0rd2.anuraplugin.references
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import junit.framework.TestCase
