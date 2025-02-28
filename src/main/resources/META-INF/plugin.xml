@@ -24,7 +24,7 @@
                 serviceImplementation="com.github.tamj0rd2.anuraplugin.services.HbsService"/>
 
         <annotator language="Handlebars"
-                   implementationClass="com.github.tamj0rd2.anuraplugin.annotators.MyAnnotator"/>
+                   implementationClass="com.github.tamj0rd2.anuraplugin.annotators.HbsVariableAnnotator"/>
 
         <psi.referenceContributor language="Handlebars"
                                   implementation="com.github.tamj0rd2.anuraplugin.references.MyReferenceContributor"/>

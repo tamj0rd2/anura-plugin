@@ -3,7 +3,7 @@ package com.github.tamj0rd2.anuraplugin.annotators
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import junit.framework.TestCase
 
-class MyAnnotatorTest : BasePlatformTestCase() {
+class HbsVariableAnnotatorTest : BasePlatformTestCase() {
 
     override fun getTestDataPath(): String {
         return "path/to/your/testdata" // Set the path to your test data files

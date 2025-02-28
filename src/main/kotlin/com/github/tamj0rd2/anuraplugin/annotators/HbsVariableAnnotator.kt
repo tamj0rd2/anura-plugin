@@ -10,7 +10,7 @@ import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.components.service
 import com.intellij.psi.PsiElement
 
-internal class MyAnnotator : Annotator {
+internal class HbsVariableAnnotator : Annotator {
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
         val hbsService = element.project.service<HbsService>()
         val projectService = element.project.service<MyProjectService>()
