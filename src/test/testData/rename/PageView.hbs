@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html>
-<body>
 <h1><{{greeting}} {{person.name}}/h1>
 <h2>You are {{person.age}} years old</h2>
 <h2>This should cause a failure {{nonExistentField}}</h2>
-{{#each people as | person |}}
-    {{person.age}}
+{{#each friends as | friend |}}
+    {{friend.age}}
 {{/each}}
-</body>
-</html>

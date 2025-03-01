@@ -12,5 +12,10 @@ class MyReferenceContributor : PsiReferenceContributor() {
             PlatformPatterns.psiElement(HbPsiElement::class.java).withLanguage(HbLanguage.INSTANCE),
             HbsToKotlinPsiReferenceProvider()
         )
+
+        registrar.registerReferenceProvider(
+            PlatformPatterns.psiElement(HbPsiElement::class.java).withLanguage(HbLanguage.INSTANCE),
+            HbsToHbsPsiReferenceProvider()
+        )
     }
 }
