@@ -46,6 +46,27 @@ class HbsVariableAnnotatorTest : BasePlatformTestCase() {
         TestCase.assertEquals(listOf("someBlockContent"), highlightedTexts)
     }
 
+    fun `test that built in references are not highlighted`() {
+        setupFiles(
+            files = mapOf(
+                "View.hbs" to
+                    // language=Handlebars
+                    """
+                    |{{@root.person}}
+                    |{{#if @root.person.name}}
+                    |    {{@root.person.emailAddress}}
+                    |    {{nonRootVariable}}
+                    |    {{index}}
+                    |    {{@index}}
+                    |{{/if}}
+                    """.trimMargin()
+            ),
+        )
+
+        val highlightedTexts = myFixture.doHighlighting().map { it.text }
+        TestCase.assertEquals(listOf("nonRootVariable", "index"), highlightedTexts)
+    }
+
     private fun setupFiles(files: Map<String, String>) {
         files.forEach { (fileName, content) -> myFixture.configureByText(fileName, content) }
     }
