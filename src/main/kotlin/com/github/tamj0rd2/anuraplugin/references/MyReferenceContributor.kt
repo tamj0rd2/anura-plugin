@@ -15,7 +15,7 @@ class MyReferenceContributor : PsiReferenceContributor() {
 
         registrar.registerReferenceProvider(
             PlatformPatterns.psiElement(HbPsiElement::class.java).withLanguage(HbLanguage.INSTANCE),
-            HbsToHbsPsiReferenceProvider()
+            HbsPsiReferenceProvider()
         )
     }
 }

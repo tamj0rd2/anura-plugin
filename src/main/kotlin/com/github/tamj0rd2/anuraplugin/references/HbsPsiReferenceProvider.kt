@@ -13,7 +13,7 @@ import com.intellij.psi.util.childrenOfType
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
 
-class HbsToHbsPsiReferenceProvider : PsiReferenceProvider() {
+class HbsPsiReferenceProvider : PsiReferenceProvider() {
     override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
         if (!element.isHbPsiIdElement()) return emptyArray()
         val blockWrapper = element.parentOfType<HbBlockWrapper>() ?: return emptyArray()

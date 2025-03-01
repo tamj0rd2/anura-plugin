@@ -4,7 +4,7 @@ import com.intellij.codeInsight.navigation.actions.GotoDeclarationAction
 import com.intellij.testFramework.LightPlatformCodeInsightTestCase
 import junit.framework.TestCase
 
-class HbsToHbsPsiReferenceProviderTest : LightPlatformCodeInsightTestCase() {
+class HbsPsiReferenceProviderTest : LightPlatformCodeInsightTestCase() {
     fun `test going to alias within named each block`() {
         configureFromFileText(
             "View.hbs",
