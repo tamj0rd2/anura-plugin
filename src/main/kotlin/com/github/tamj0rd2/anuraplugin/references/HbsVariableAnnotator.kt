@@ -25,7 +25,6 @@ internal class HbsVariableAnnotator : Annotator {
             .filterIsInstance<KtElement>()
             .ifNotEmpty { return }
 
-
         holder.newSilentAnnotation(HighlightSeverity.ERROR)
             .highlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL)
             .create()
