@@ -1,6 +1,6 @@
-# test-intellij-plugin
+# anura-plugin
 
-![Build](https://github.com/tamj0rd2/test-intellij-plugin/workflows/Build/badge.svg)
+![Build](https://github.com/tamj0rd2/anura-plugin/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/26704-anura.svg)](https://plugins.jetbrains.com/plugin/26704-anura)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/26704-anura.svg)](https://plugins.jetbrains.com/plugin/26704-anura)
 
@@ -26,7 +26,7 @@ Gotchas:
 
 - Using the IDE built-in plugin system:
   
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "test-intellij-plugin"</kbd> >
+  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "anura-plugin"</kbd> >
   <kbd>Install</kbd>
   
 - Using JetBrains Marketplace:
@@ -38,7 +38,7 @@ Gotchas:
 
 - Manually:
 
-  Download the [latest release](https://github.com/tamj0rd2/test-intellij-plugin/releases/latest) and install it manually using
+  Download the [latest release](https://github.com/tamj0rd2/anura-plugin/releases/latest) and install it manually using
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
 
