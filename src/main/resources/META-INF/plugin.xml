@@ -29,6 +29,10 @@
                                  forClass="com.dmarcotte.handlebars.psi.HbPsiElement"/>
     </extensions>
 
+    <extensions defaultExtensionNs="org.jetbrains.kotlin">
+        <supportsKotlinPluginMode supportsK2="true" />
+    </extensions>
+
     <applicationListeners>
     </applicationListeners>
     <actions>
