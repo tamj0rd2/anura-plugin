@@ -28,15 +28,19 @@ fun KotlinShortNamesCache.searchForMatchingKotlinDeclaration(
         .singleOrNullOrThrow()
         ?: return null
 
-    val methodToSearchFor = "get" + fieldName.replaceFirstChar { it.uppercaseChar() }
+    val methodToSearchFor = fieldName.toGeneratedJavaName()
 
     val matchingMethod = matchingModel.allMethods
         .asIterable()
-        .singleOrNullOrThrow { it.name == methodToSearchFor }
+        .firstOrNull { it.name == methodToSearchFor }
         ?: return null
 
     return matchingMethod.navigationElement as? KtElement
 }
+
+private fun String.toGeneratedJavaName() =
+    if (startsWith("is")) this
+    else "get" + replaceFirstChar { it.uppercaseChar() }
 
 fun KotlinShortNamesCache.searchForMatchingKotlinDeclaration(
     scope: GlobalSearchScope,
