@@ -7,7 +7,7 @@ import com.intellij.psi.util.elementType
 import org.jetbrains.kotlin.idea.base.util.module
 import org.jetbrains.kotlin.idea.base.util.restrictToKotlinSources
 
-abstract class HbsToKotlinReference(idElement: HbPsiElement) : PsiReferenceBase<HbPsiElement>(idElement, false) {
+abstract class HbsToKotlinReference(idElement: HbPsiElement) : PsiReferenceBase<HbPsiElement>(idElement) {
 
     init {
         require(idElement.isHbPsiIdElement()) { "Expected an ID element but got ${idElement.elementType}" }

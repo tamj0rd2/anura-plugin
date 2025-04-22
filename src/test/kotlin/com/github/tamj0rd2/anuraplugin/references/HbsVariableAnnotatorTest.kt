@@ -69,5 +69,6 @@ class HbsVariableAnnotatorTest : BasePlatformTestCase() {
 
     private fun setupFiles(files: Map<String, String>) {
         files.forEach { (fileName, content) -> myFixture.configureByText(fileName, content) }
+        myFixture.enableInspections(HbsUnresolvedReferenceInspection::class.java)
     }
 }

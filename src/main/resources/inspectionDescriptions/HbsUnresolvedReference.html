@@ -1,0 +1,28 @@
+<html lang="en">
+<body>
+<p>
+    Reports that the corresponding handlebars identifier was not present in a related Kotlin model.
+</p>
+<!-- tooltip end -->
+<p>
+    Inside <b>MyViewModel.kt</b>:
+</p>
+<pre><code>
+data class MyViewModel(val user: User)
+data class User(val name: String)
+</code></pre>
+
+<p>
+    Inside <b>MyView.hbs</b>:
+</p>
+<pre><code>
+Username: {{user.name}}
+Age: {{user.age}}
+</code></pre>
+
+<p>
+    In the above example, <code>age</code> would be highlighted because it is not a member of the <code>User</code> model.
+</p>
+
+</body>
+</html>

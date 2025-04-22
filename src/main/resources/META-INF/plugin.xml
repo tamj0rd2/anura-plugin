@@ -19,8 +19,11 @@
                 serviceInterface="com.github.tamj0rd2.anuraplugin.services.IHbsService"
                 serviceImplementation="com.github.tamj0rd2.anuraplugin.services.HbsService"/>
 
-        <annotator language="Handlebars"
-                   implementationClass="com.github.tamj0rd2.anuraplugin.references.HbsVariableAnnotator"/>
+        <localInspection language="Handlebars"
+                         groupName="Handlebars/Mustache"
+                         displayName="Unresolved reference"
+                         implementationClass="com.github.tamj0rd2.anuraplugin.references.HbsUnresolvedReferenceInspection"/>
+
 
         <psi.referenceContributor language="Handlebars"
                                   implementation="com.github.tamj0rd2.anuraplugin.references.MyReferenceContributor"/>
