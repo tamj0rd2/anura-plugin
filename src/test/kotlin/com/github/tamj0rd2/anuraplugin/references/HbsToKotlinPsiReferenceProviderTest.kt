@@ -481,21 +481,60 @@ class HbsToKotlinPsiReferenceProviderTest : LightPlatformCodeInsightFixture4Test
     }
 
     @Test
-    fun `going to declaration of variable that is a kotlin field, from within a partial`() {
+    fun `can go to a definition in the viewmodel, using the root prefix`() {
+        runGoToKotlinDeclarationTest(
+            // language=Kt
+            kotlinFileContent = "data class ViewModel(val greeting: String?)",
+            handlebarsFileContent = "<h1>{{@root.<caret>greeting}}, world</h1>",
+            expectedReferences = listOf(
+                ExpectedReference(
+                    name = "greeting",
+                    definedBy = "ViewModel"
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `from within a partial - can go to a definition within the root view model`() {
         runGoToKotlinDeclarationTest(
             files = mapOf(
-                "Person.kt" to
+                "View.kt" to
                         // language=Kt
                         """
                         |data class Person(val name: String)
+                        |data class ViewModel(val somethingAtRoot: Int, val person: Person)
                         """.trimMargin(),
                 "Person.hbs" to
-                        "<h1>{{<caret>name}}, world</h1>",
+                        "<h1>{{@root.<caret>somethingAtRoot}}, world</h1>",
             ),
             expectedReferences = listOf(
                 ExpectedReference(
-                    name = "name",
-                    definedBy = "Person"
+                    name = "somethingAtRoot",
+                    definedBy = "ViewModel"
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `from within a deep partial - can go to a definition within the root view model`() {
+        runGoToKotlinDeclarationTest(
+            files = mapOf(
+                "View.kt" to
+                        // language=Kt
+                        """
+                        |data class Deep(val name: String)
+                        |data class Person(val deep: Deep)
+                        |data class ViewModel(val somethingAtRoot: Int, val person: Person)
+                        """.trimMargin(),
+                "Person.hbs" to
+                        "<h1>{{@root.<caret>somethingAtRoot}}, world</h1>",
+            ),
+            expectedReferences = listOf(
+                ExpectedReference(
+                    name = "somethingAtRoot",
+                    definedBy = "ViewModel"
                 )
             )
         )

@@ -1,6 +1,7 @@
 package com.github.tamj0rd2.anuraplugin.references
 
 import com.dmarcotte.handlebars.psi.HbBlockWrapper
+import com.dmarcotte.handlebars.psi.HbData
 import com.dmarcotte.handlebars.psi.HbOpenBlockMustache
 import com.dmarcotte.handlebars.psi.HbPath
 import com.dmarcotte.handlebars.psi.impl.HbPsiElementImpl
@@ -30,6 +31,10 @@ class HbsPsiReferenceProvider : PsiReferenceProvider() {
 
         if (element.context is HbPath) {
             return arrayOf(HbPathPartToKotlinElement(element))
+        }
+
+        if (element.context is HbData) {
+            return arrayOf(HbDataPartToKotlinElement(element))
         }
 
         thisLogger().error("don't know how to resolve this one")

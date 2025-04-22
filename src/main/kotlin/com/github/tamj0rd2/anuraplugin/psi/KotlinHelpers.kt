@@ -1,20 +1,19 @@
 package com.github.tamj0rd2.anuraplugin.psi
 
+import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.elementType
-import fleet.util.singleOrNullOrThrow
 import org.jetbrains.kotlin.idea.caches.KotlinShortNamesCache
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 
-fun KotlinShortNamesCache.searchForMatchingKotlinDeclaration(
+fun KotlinShortNamesCache.searchForViewModelByName(
     scope: GlobalSearchScope,
     modelName: String,
-    fieldName: String,
-): KtElement? {
+): PsiClass? {
     val possibleModelNames = buildSet {
         add(modelName)
 
@@ -23,10 +22,18 @@ fun KotlinShortNamesCache.searchForMatchingKotlinDeclaration(
         }
     }
 
-    val matchingModel = possibleModelNames
+    return possibleModelNames
+        .asSequence()
         .flatMap { getClassesByName(it, scope).toList() }
-        .singleOrNullOrThrow()
-        ?: return null
+        .firstOrNull()
+}
+
+fun KotlinShortNamesCache.searchForMatchingKotlinDeclaration(
+    scope: GlobalSearchScope,
+    modelName: String,
+    fieldName: String,
+): KtElement? {
+    val matchingModel = searchForViewModelByName(scope = scope, modelName = modelName) ?: return null
 
     val methodToSearchFor = fieldName.toGeneratedJavaName()
 

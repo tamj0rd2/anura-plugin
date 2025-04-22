@@ -2,6 +2,7 @@ package com.github.tamj0rd2.anuraplugin.psi
 
 import com.dmarcotte.handlebars.parsing.HbTokenTypes
 import com.dmarcotte.handlebars.psi.HbBlockWrapper
+import com.dmarcotte.handlebars.psi.HbData
 import com.dmarcotte.handlebars.psi.HbOpenBlockMustache
 import com.dmarcotte.handlebars.psi.HbParam
 import com.dmarcotte.handlebars.psi.HbPath
@@ -76,4 +77,12 @@ object HbsPsiHelpers {
             .asSequence()
             .filter { it.isHbPsiIdElement() }
 
+
+    fun HbData.identifierParts(upToAndIncluding: HbPsiElement? = null) =
+        childrenOfType<HbPsiElement>()
+            .asSequence()
+            .filter { it.isHbPsiIdElement() }
+            .toList()
+            .takeWhileInclusive { upToAndIncluding == null || !it.isEquivalentTo(upToAndIncluding) }
+            .map { it.text }
 }
