@@ -8,6 +8,7 @@ import org.jetbrains.kotlin.idea.caches.KotlinShortNamesCache
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtParameter
+import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 
 fun KotlinShortNamesCache.searchForViewModelByName(
@@ -54,22 +55,20 @@ fun KotlinShortNamesCache.searchForMatchingKotlinDeclaration(
     fieldName: String,
     kotlinElement: PsiElement,
 ): KtElement? {
-    when (kotlinElement) {
-        is KtParameter -> {
-            val ref = kotlinElement.typeReference!!.findDescendantOfType<KtNameReferenceExpression>()!!
-
-            val foundKtElement = searchForMatchingKotlinDeclaration(
-                scope = scope,
-                modelName = ref.getReferencedName(),
-                fieldName = fieldName
-            )
-            return foundKtElement
-        }
-
-        else -> {
-            TODO("how do I deal with ${kotlinElement.elementType}?")
-        }
+    val typeReference = when(kotlinElement) {
+        is KtParameter -> kotlinElement.typeReference
+        is KtProperty -> kotlinElement.typeReference
+        else -> TODO("how do I deal with ${kotlinElement.elementType}?")
     }
+
+    val ref = typeReference!!.findDescendantOfType<KtNameReferenceExpression>()!!
+
+    val foundKtElement = searchForMatchingKotlinDeclaration(
+        scope = scope,
+        modelName = ref.getReferencedName(),
+        fieldName = fieldName
+    )
+    return foundKtElement
 }
 
 fun KotlinShortNamesCache.searchForMatchingKotlinDeclaration(

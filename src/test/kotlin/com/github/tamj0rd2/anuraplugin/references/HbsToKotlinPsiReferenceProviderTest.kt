@@ -110,6 +110,34 @@ class HbsToKotlinPsiReferenceProviderTest : LightPlatformCodeInsightFixture4Test
     }
 
     @Test
+    fun `going to declaration of variable that includes nesting - nested property`() {
+        runGoToKotlinDeclarationTest(
+            files = mapOf(
+                "ViewModel.kt" to
+                        // language=Kt
+                        """
+                        |package models
+                        |interface ViewModel { val person: Person get() = Person("hello") }
+                        """.trimMargin(),
+                "Person.kt" to
+                        // language=Kt
+                        """
+                        |package models
+                        |data class Person(val name: String)
+                        """.trimMargin(),
+                "View.hbs" to
+                        "<h1>{{person.<caret>name}}, world</h1>",
+            ),
+            expectedReferences = listOf(
+                ExpectedReference(
+                    name = "name",
+                    definedBy = "Person"
+                )
+            )
+        )
+    }
+
+    @Test
     fun `going to declaration of variable used in if block`() {
         runGoToKotlinDeclarationTest(
             // language=Kt

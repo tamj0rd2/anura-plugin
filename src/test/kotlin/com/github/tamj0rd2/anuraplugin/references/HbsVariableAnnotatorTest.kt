@@ -27,6 +27,25 @@ class HbsVariableAnnotatorTest : BasePlatformTestCase() {
         TestCase.assertEquals(listOf("incorrectName"), highlightedTexts)
     }
 
+    fun `test variables that don't have corresponding kotlin fields are highlighted - regression of properties`() {
+        setupFiles(
+            files = mapOf(
+                "ViewModel.kt" to
+                        // language=Kt
+                        """
+                        |data class Person(val name: String)
+                        |data class ViewModel(val greeting: String) { val person: Person get() = Person("John") }
+                        """.trimMargin(),
+                "View.hbs" to
+                        // language=Handlebars
+                        "<h1>{{greeting}}, {{person.name}} is {{person.age}}</h1>",
+            ),
+        )
+
+        val highlightedTexts = myFixture.doHighlighting().map { it.text }
+        TestCase.assertEquals(listOf("age"), highlightedTexts)
+    }
+
     fun `test that partial names and their context are not annotated`() {
         setupFiles(
             files = mapOf(
