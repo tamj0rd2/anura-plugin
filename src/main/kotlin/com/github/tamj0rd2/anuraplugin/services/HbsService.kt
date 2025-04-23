@@ -8,10 +8,10 @@ import com.dmarcotte.handlebars.psi.HbSimpleMustache
 import com.github.tamj0rd2.anuraplugin.handlers.HbsUtils.isHbPsiIdElement
 import com.intellij.openapi.components.Service
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.elementType
 import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
 import org.jetbrains.kotlin.psi.psiUtil.parentsWithSelf
 import org.jetbrains.kotlin.util.takeWhileInclusive
-import org.toml.lang.psi.ext.elementType
 
 interface IHbsService {
     fun getHbsIdentifierParts(element: PsiElement): List<String>

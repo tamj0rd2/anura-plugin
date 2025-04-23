@@ -4,7 +4,7 @@ import com.dmarcotte.handlebars.parsing.HbTokenTypes
 import com.dmarcotte.handlebars.psi.HbPsiElement
 import com.dmarcotte.handlebars.psi.impl.HbPsiElementImpl
 import com.intellij.psi.PsiElement
-import org.toml.lang.psi.ext.elementType
+import com.intellij.psi.util.elementType
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
